@@ -5,20 +5,20 @@ import load.base._
 
 class HelloSimulation extends Simulation with Log with Config {
 
+  log.info("{}", config)
+
   val scn = scenario("hello").forever {
-    exec(
-      ApiAuth.hello
-    )
+    exec(ApiAuth.hello)
   }
 
-  val load = scn.inject(rampUsers(2) during (2))
+  val load = scn.inject(rampUsers(config.loadProfile.rampUsers) during (config.loadProfile.rampSeconds))
 
   setUp(load)
     .protocols(ApiAuth.protocol)
     .maxDuration(config.loadProfile.maxDurationSeconds)
     .assertions(
-    forAll.failedRequests.count.is(0),
-    forAll.responseTime.percentile4.lte(config.loadProfile.expectedResponseTimeMsec)
-  )
+      forAll.failedRequests.count.is(0),
+      forAll.responseTime.percentile4.lte(config.loadProfile.expectedResponseTimeMsec)
+    )
 
 }

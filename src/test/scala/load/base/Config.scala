@@ -12,7 +12,6 @@ class TestConfig {
   @BeanProperty var loadProfile: LoadProfile = null
   @BeanProperty var cardservice: Cardservice = null
 
-
   override def toString = s"TestConfig(loadProfile=$loadProfile, cardservice=$cardservice)"
 }
 

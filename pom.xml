@@ -21,25 +21,36 @@
       <artifactId>gatling-charts-highcharts</artifactId>
       <version>${gatling.version}</version>
     </dependency>
-    <dependency>
-      <groupId>io.gatling</groupId>
-      <artifactId>gatling-app</artifactId>
-      <version>${gatling.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>io.gatling</groupId>
-      <artifactId>gatling-recorder</artifactId>
-      <version>${gatling.version}</version>
-    </dependency>
 
   </dependencies>
 
   <build>
     <plugins>
       <plugin>
+        <!-- https://gatling.io/docs/3.3/extensions/maven_plugin/ -->
+
         <groupId>io.gatling</groupId>
         <artifactId>gatling-maven-plugin</artifactId>
         <version>${gatling-maven-plugin.version}</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>test</goal>
+            </goals>
+          </execution>
+        </executions>
+
+        <configuration>
+          <includes>                                                               <!-- include filters, see dedicated section below -->
+            <include>load.*</include>
+          </includes>
+          <runMultipleSimulations>true</runMultipleSimulations>                   <!-- if the plugin should run multiple simulations sequentially -->
+
+          <simulationsFolder>${project.basedir}/src/test/scala</simulationsFolder> <!-- where the simulations to be compiled are located -->
+          <resourcesFolder>${project.basedir}/src/test/resources</resourcesFolder> <!-- where the test resources are located -->
+          <resultsFolder>${project.basedir}/target/gatling</resultsFolder>         <!-- where the simulation log and the HTML reports will be generated -->
+        </configuration>
+
       </plugin>
     </plugins>
   </build>

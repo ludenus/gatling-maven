@@ -5,14 +5,13 @@ import io.gatling.http.Predef._
 
 object ApiAuth extends Object with Log with Config {
 
-  log.info("{}", config)
-
   val protocol = http
     .baseUrl(config.cardservice.url)
+    .maxConnectionsPerHost(config.loadProfile.rampUsers)
     .userAgentHeader("Gatling Performance Test")
 
   val hello = exec(
-      http("get nonce")
+      http("hello")
         .post("/auth/hello")
         .check(
           status.is(200),
